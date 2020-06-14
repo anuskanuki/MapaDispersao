@@ -1,8 +1,5 @@
-package MapaDispersao;
 //Anuska Kepler, Victor Bona, Gabriel Panca
 
-import listas.ItemLista;
-import listas.ListaEncadeada;
 
 public class MapaDispersao<K, T> {
 
@@ -10,14 +7,15 @@ public class MapaDispersao<K, T> {
     private ListaEncadeada<NoMapa<K, T>> tabela[];
     private ListaEncadeada listaEncadeada;
 
-    //private ItemLista itemLista;
+    private ItemLista itemLista;
+    
     public MapaDispersao(int quantidade) {
         this.tabela = new ListaEncadeada[quantidade];
     }
 
     private int calcularHash(K chave) {
         int tamanho = tabela.length;
-        return chave.hashCode() % tamanho;
+        return chave.hashCode() < 0 ? (chave.hashCode() * -1) % tamanho : chave.hashCode() % tamanho;
     }
 
     public boolean inserir(K chave, T dado) {
@@ -40,9 +38,14 @@ public class MapaDispersao<K, T> {
         if (tabela[indice] != null) {
             NoMapa no = new NoMapa();
             no.setChave(chave);
-            //return (T) tabela[indice].retira(no);
+            for (int i = 0; i < tabela[indice].getQuantidade(); i++) {
+                if(tabela[indice].busca(i).equals(no)) {
+                    return (T)tabela[indice].retira(i);
+                }
+            }
         }
         return null;
+        
     }
 
     public T buscar(K chave) {
@@ -50,10 +53,12 @@ public class MapaDispersao<K, T> {
         if (tabela[indice] != null) {
             NoMapa noMapa = new NoMapa();
             noMapa.setChave(chave);
-            //ItemLista<NoMapa<K, T>> no = tabela[indice].buscar(noMapa);
-//            if (no != null) {
-//                return no.getInfo().getInfo();
-//            }
+            
+            for (int i = 0; i < tabela[indice].getQuantidade(); i++) {
+                if(tabela[indice].busca(i).equals(noMapa)) {
+                    return (T)tabela[indice].busca(i);
+                }
+            }
         }
         return null;
     }
@@ -62,11 +67,7 @@ public class MapaDispersao<K, T> {
         int cont = 0;
         for (int i = 0; i < tabela.length; i++) {
             if (tabela[i] != null) {
-                //   ItemLista<NoMapa<K, T>> no = tabela[i].primeiro;
-                // while (no != null) {
-                //  cont++;
-                //  no = no.getProximo();
-                // }
+                cont += tabela[i].getQuantidade();
             }
         }
         return cont;
@@ -76,14 +77,12 @@ public class MapaDispersao<K, T> {
         int indice = calcularHash(chave);
         if (tabela[indice] != null) {
             NoMapa noMapa = new NoMapa();
-            noMapa.setChave(chave.hashCode());
-            // ItemLista<NoMapa<K, T>> no = tabela[indice].primeiro;
-//            while (no != null) {
-//                if (no.getInfo().equals(chave)) {
-//                    return true;
-//                }
-//                no = no.getProximo();
-//            }
+            noMapa.setChave(chave);
+            for (int i = 0; i < tabela[indice].getQuantidade(); i++) {
+                if(tabela[indice].busca(i).equals(noMapa)) {
+                    return true;
+                }
+            }
         }
         return false;
     }
