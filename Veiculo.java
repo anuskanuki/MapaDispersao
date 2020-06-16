@@ -1,4 +1,4 @@
-﻿//Anuska Kepler, Victor Bona, Gabriel Panca
+//Anuska Kepler, Victor Bona, Gabriel Panca
 
 public class Veiculo implements Comparable<Veiculo> {
 

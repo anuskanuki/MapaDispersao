@@ -1,4 +1,5 @@
 //Anuska Kepler, Victor Bona, Gabriel Panca
+
 public class NoMapa<K, T> {
 
     private K chave;
